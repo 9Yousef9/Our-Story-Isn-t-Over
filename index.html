@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حكايتنا لسه مكملة</title>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0b1030;--bg2:#2b1452;--tx:#fdf2f8;--pk:#f9a8d4;--gd:#fcd34d;--cd:rgba(255,255,255,.09);--ln:rgba(249,168,212,.35);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,var(--bg),var(--bg2) 80%,#5b2a6e);background-attachment:fixed;color:var(--tx);font-family:Tajawal,Tahoma,sans-serif;font-size:18px;line-height:1.9;text-align:center;overflow-x:hidden}
+body.rose{background:linear-gradient(180deg,#4a2468,#a14a8c 70%,#f0a6c4);background-attachment:fixed}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+#app{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:34px 20px 80px;opacity:0;transition:opacity .35s}
+#app.in{opacity:1}
+h1,h2{font-family:"Aref Ruqaa",Tajawal,serif;font-weight:700;line-height:1.5;margin:.4em 0}
+h1{font-size:2.3rem}h2{font-size:1.7rem;color:var(--pk)}
+.sub{color:var(--pk);margin:0 0 1em}
+p{margin:.7em 0}
+.moon{width:120px;height:120px;border-radius:50%;margin:20px auto;background:radial-gradient(circle at 35% 35%,#fffbe8,#f6e7a8 60%,#d9c06c);box-shadow:0 0 60px 18px rgba(252,211,77,.35)}
+.b{font:inherit;font-weight:700;color:#2a0f3d;background:linear-gradient(135deg,#fcd34d,#f9a8d4);border:0;border-radius:40px;padding:14px 34px;margin-top:22px;cursor:pointer;box-shadow:0 6px 24px rgba(249,168,212,.4)}
+.b:active{transform:scale(.97)}
+.b:focus-visible,.it:focus-visible,.ch:focus-visible{outline:3px solid var(--gd);outline-offset:3px}
+.c,.it,.ch{display:block;width:100%;background:var(--cd);border:1px solid var(--ln);border-radius:18px;padding:16px 18px;margin:12px 0;color:inherit;font:inherit;text-align:center;backdrop-filter:blur(6px)}
+.it,.ch{cursor:pointer}
+.it b{display:block;font-size:1.1rem}
+.it span{display:none;font-size:.97rem;margin-top:6px;color:#ffe9f4}
+.it.on{border-color:var(--gd);box-shadow:0 0 22px rgba(252,211,77,.35)}
+.it.on span{display:block}
+.ch.on{border-color:var(--gd);background:rgba(252,211,77,.16)}
+.hid{display:none}
+.star{font-size:2.6rem;background:none;border:0;cursor:pointer;margin:6px 12px;filter:grayscale(1) opacity(.5);transition:.3s}
+.star.on{filter:none;text-shadow:0 0 18px var(--gd);transform:scale(1.2)}
+.note{font-size:.95rem;opacity:.85}
+.env{font-size:5rem;background:none;border:0;cursor:pointer;animation:fl 2.4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-8px)}}
+.letter{background:rgba(255,255,255,.93);color:#4a2145;border-radius:16px;padding:24px 20px;text-align:right;font-family:"Aref Ruqaa",Tajawal,serif;font-size:1.22rem;line-height:2.1;min-height:200px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.letter p{margin:.5em 0}
+.big{font-size:6rem;animation:pl 2s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.15);filter:drop-shadow(0 0 24px #fcd34d)}}
+#snd{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;z-index:5;background:var(--cd);border:1px solid var(--ln);color:var(--tx);border-radius:30px;padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+#hearts{position:fixed;inset:0;pointer-events:none;z-index:4}
+.ht{position:absolute;bottom:-30px;animation:up 3s linear forwards}
+@keyframes up{to{transform:translateY(-110vh);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div id="hearts"></div>
+<button id="snd" aria-pressed="false">🎵 موسيقى</button>
+<main id="app"></main>
+<script>
+var NAME="حبيبتي";
+var app=document.getElementById("app"),cur=0,R=[];
+try{cur=Math.min(+localStorage.getItem("ch")||0,6)}catch(e){}
+function go(i){
+  cur=i;try{localStorage.setItem("ch",i)}catch(e){}
+  app.classList.remove("in");hearts();
+  setTimeout(function(){
+    document.body.classList.toggle("rose",i>=5);
+    app.innerHTML="";R[i]();app.classList.add("in");window.scrollTo(0,0);
+  },380);
+}
+function btn(t,n,id){return '<button class="b'+(id?' hid':'')+'"'+(id?' id="nx"':'')+' onclick="go('+n+')">'+t+'</button>'}
+function hearts(){
+  var h=document.getElementById("hearts");
+  for(var i=0;i<7;i++){var s=document.createElement("span");s.className="ht";s.textContent=["💗","✨","💜","🤍"][i%4];s.style.left=(Math.random()*90)+"%";s.style.animationDelay=(i*.15)+"s";h.appendChild(s);setTimeout(function(x){x.remove()}.bind(null,s),3400)}
+}
+function wire(done){
+  var its=app.querySelectorAll(".it");
+  its.forEach(function(it){it.onclick=function(){it.classList.add("on");if(app.querySelectorAll(".it.on").length===its.length){var n=document.getElementById("nx");if(n)n.classList.remove("hid");if(done)done()}}});
+}
+function items(a){return a.map(function(x){return '<button class="it"><b>'+x[0]+'</b><span>'+x[1]+'</span></button>'}).join("")}
+
+R[0]=function(){
+  app.innerHTML='<div class="moon"></div><h2>في حكاية لسه مخلصتش</h2>'+
+  '<p>في مكان بعيد، وسط عالم مليان نجوم وحكايات... كانت فيه حكاية شخصين اتقابلوا، وقربوا من بعض، وبدأوا يشاركوا تفاصيل من حياتهم.</p>'+
+  '<p>ومهما اتغيرت الأيام، لسه فيه فصل جديد مستني يتكتب...</p>'+
+  '<h1>'+NAME+'</h1><p class="sub">الرحلة دي معمولة علشانك ❤️</p>'+btn("ابدئي الحكاية 🌙",1);
+};
+R[1]=function(){
+  app.innerHTML='<h2>تفاصيل صغيرة، بس كانت بتفرق</h2><p class="note">مش كل اللي جاي هنحكي فيه عن اللي فات... فيه حاجات جميلة لسه ممكن تحصل.</p>'+
+  '<div class="c"><b>💌 الكلام اللي كان بيجمعنا</b><br>كان فيه وقت بنحب نحكي لبعض عن تفاصيل يومنا، وأوقات مجرد إننا نعرف أخبار بعض كان كفاية علشان نحس إننا قريبين.</div>'+
+  '<div class="c"><b>🌸 الضحكة اللي بتيجي من غير سبب</b><br>ساعات كلمة بسيطة أو هزار بينا بتكون من أحلى تفاصيل اليوم.</div>'+
+  '<div class="c"><b>🤍 وجودك بيفرق</b><br>أنا مش محتاج إن كل يوم يكون مثالي، لكن وجودك في حياتي بيفرق معايا.</div>'+
+  '<p class="sub">الحاجات الصغيرة مش صغيرة لما تكون جاية من شخص غالي علينا.</p>'+btn("نكمل الحكاية؟ 💗",2);
+};
+R[2]=function(){
+  app.innerHTML='<h2>مش كل بُعد معناه إن المشاعر انتهت</h2>'+
+  '<p>أوقات الحياة بتاخدنا في اتجاهات مختلفة. المسؤوليات بتزيد، والوقت بيقل، وممكن من غير ما نقصد نحس إن المسافة بينا كبرت. وده مش معناه إن حد فينا شخص سيئ، ولا إن كل اللي بينا اختفى.</p>'+
+  '<p>أنا مش عايز ألومك على انشغالك، ومش عايزك تلومي نفسك على كل حاجة. إحنا الاتنين اعترفنا إن عندنا حاجات محتاجين نصلحها، ودي في حد ذاتها خطوة مهمة.</p>'+
+  '<p class="note">المسي النجوم التلاتة ✨</p>'+
+  '<div>'+["الفهم","الصراحة","الاهتمام المتبادل"].map(function(t){return '<button class="it star" aria-label="'+t+'"><b>⭐</b><span style="font-size:.9rem;display:block">'+t+'</span></button>'}).join("")+'</div>'+
+  '<p class="hid" id="q">مش مطلوب مننا نكون موجودين لبعض كل دقيقة، لكن مهم نعرف إننا لسه بنحاول نكون جزءًا من حياة بعض.</p>'+btn("لسه عندنا فرصة ❤️",3,1);
+  var s=app.querySelectorAll(".star");
+  s.forEach(function(x){x.style.cssText="display:inline-block;width:auto;background:none;border:0;padding:6px 10px";});
+  wire(function(){document.getElementById("q").classList.remove("hid")});
+  app.querySelectorAll(".star").forEach(function(x){x.querySelector("span").style.display="block"});
+};
+R[3]=function(){
+  app.innerHTML='<h2>المرة دي نتعلم من اللي فات</h2><p class="note">افتحي البوابات الأربع 🌷</p>'+
+  items([["🌷 نفهم قبل ما نحكم","لو يوم كان صعب أو حد فينا كان مشغول، نحاول نفهم ظروف بعض قبل ما نفترض إن فيه مشكلة. ولو حاجة ضايقتنا، نتكلم عنها بدل ما تكبر جوانا."],
+  ["💌 نفضل قريبين حتى لو مشغولين","مش لازم نتكلم طول اليوم. رسالة بسيطة ممكن تطمّن الطرف التاني وتخليه عارف إننا لسه مهتمين."],
+  ["🤍 الاهتمام من الطرفين","العلاقة مش مسؤولية شخص واحد. كل واحد فينا محتاج يحس إن التاني بيحاول معاه."],
+  ["🌱 ندي نفسنا وقت","مش لازم كل حاجة تتصلح في يوم وليلة. المهم نكون صادقين ونتعلم من أخطائنا."]])+
+  '<div class="hid" id="q"><div style="font-size:4rem">🌳✨</div><p>البداية الجديدة مش وعد إننا مش هنغلط تاني... لكنها فرصة إننا نتعلم نتعامل مع أخطائنا بطريقة أحسن.</p></div>'+btn("للمغامرة 🗺️",4,1);
+  wire(function(){document.getElementById("q").classList.remove("hid")});
+};
+R[4]=function(){
+  app.innerHTML='<h2>صندوق الحاجات اللي نفسي أقولها ليكي</h2><div id="st"></div>';
+  var st=document.getElementById("st");
+  function s1(){
+    var order=[2,3,1],next=1;
+    st.innerHTML='<p class="sub">المحطة الأولى: نجمة الاهتمام ⭐</p><p>اضغطي على النجوم بالترتيب 1 ثم 2 ثم 3</p><div id="sg"></div><p class="hid" id="m1"></p>';
+    var g=document.getElementById("sg");
+    order.forEach(function(n){var b=document.createElement("button");b.className="star";b.textContent="⭐"+n;b.style.fontSize="1.8rem";b.onclick=function(){if(n===next){b.classList.add("on");next++;if(next>3){var m=document.getElementById("m1");m.textContent="مش لازم تعملي حاجة كبيرة علشان تفرحيني. ساعات رسالة منك، أو إنك تحكيلي عن يومك، أو إننا نضحك سوا، بيكونوا كفاية.";m.classList.remove("hid");g.insertAdjacentHTML("afterend",'<button class="b" id="n1">المحطة التانية 💗</button>');document.getElementById("n1").onclick=s2}}else{next=1;g.querySelectorAll(".star").forEach(function(x){x.classList.remove("on")})}};g.appendChild(b)});
+  }
+  function s2(){
+    st.innerHTML='<p class="sub">المحطة التانية: لغز القلوب 💗</p><p>إيه الحاجة اللي ممكن تكبر بين شخصين، حتى لو وقتهم مع بعض قليل؟</p>'+
+    ['عدد الرسائل','الفهم والاهتمام المتبادل','إن حد فيهم يفضل متاح طول اليوم'].map(function(t,i){return '<button class="ch" data-i="'+i+'">'+t+'</button>'}).join("")+'<p class="hid" id="m2">القرب مش بيتقاس بعدد الساعات بس، لكن كمان بمدى اهتمامنا وفهمنا لبعض.</p><div id="z"></div>';
+    st.querySelectorAll(".ch").forEach(function(c){c.onclick=function(){if(c.dataset.i==="1"){c.classList.add("on");document.getElementById("m2").classList.remove("hid");document.getElementById("z").innerHTML='<button class="b" id="n2">المحطة الأخيرة 🎁</button>';document.getElementById("n2").onclick=s3}else{c.textContent+=" ... جربي تاني 🌙"}}});
+  }
+  function s3(){
+    st.innerHTML='<p class="sub">المحطة التالتة: صندوق الرسائل المخفية 🎁</p><p class="note">افتحي المفاتيح التلاتة 🔑</p>'+
+    items([["🔑 حاجة بحبها","بحب إن يكون بينا مساحة نقدر نكون فيها على طبيعتنا، نحكي ونضحك من غير خوف من سوء الفهم."],["🔑 حاجة بتمنّاها","بتمنى لما نختلف، نعرف نتكلم بهدوء ونسمع بعض، بدل ما نخلي الخلاف يبعدنا."],["🔑 حاجة مستنيها","مستني الأيام اللي نقدر فيها نعيش تفاصيل جميلة سوا، علشان إحنا الاتنين نكون مرتاحين ومبسوطين."]])+btn("الباب الذهبي ✨",5,1);
+    wire();
+  }
+  s1();
+};
+R[5]=function(){
+  app.innerHTML='<h2>كلام من قلبي ليكي</h2><button class="env" id="ev" aria-label="افتحي الرسالة">💌</button><p class="note" id="hn">اضغطي على الظرف</p><div class="letter hid" id="lt"></div><div id="sg"></div>';
+  var paras=["حبيبتي ❤️","أنا عملتلك الموقع ده علشان كان نفسي أقولك شوية حاجات، بس بطريقة مختلفة تفضل ذكرى حلوة بينا.","أنا عارف إن الفترة اللي فاتت مكانتش زي زمان، وإن كل واحد فينا كان عنده ظروفه وأخطاؤه. ومش شايف إن الحل إننا نعاتب بعض على اللي حصل، ولا نرجع كل حاجة زي ما كانت من غير ما نفهم إيه اللي اتغير.","أنا مبسوط إننا اتكلمنا بصراحة، وإن كل واحد فينا اعترف بغلطه، وإننا قررنا ندي لبعض فرصة تانية. نفسي نتعلم نفهم بعض أكتر، ونتكلم عن اللي مضايقنا من غير ما نخسر قربنا.","نفسي لما تكوني مشغولة تبقي مرتاحة إنك تقوليلي، وأنا أحاول أفهم ظروفك. ومش عايزك تحسي إنك مطالبة تكوني موجودة طول الوقت علشاني، لكن علاقتنا تستحق مننا شوية وقت واهتمام.","أنا مش بوعدك إن كل الأيام هتكون سهلة، ولا إننا عمرنا ما هنختلف تاني. لكن أتمنى لما نختلف نفتكر إننا مش أعداء، وإن الهدف مش إن حد فينا يكسب النقاش، لكن نوصل لحل يريحنا إحنا الاتنين.","أنا مش عايز نكرر نفس الأخطاء، أنا عايز نكتب حكاية جديدة، نكون فيها أنضج وأهدى وأقدر على فهم بعض. والحاجات الحلوة بتحتاج وقت.","شكرًا إننا لسه بندي لبعض فرصة، وشكرًا إننا قررنا نحاول من جديد. خلينا نخلي الفرصة دي بداية لحاجة أحسن، مش مجرد رجوع للي فات. ❤️","من يوسف، ليكي إنتِ.<br>Youssef ❤️"];
+  var opened=false;
+  document.getElementById("ev").onclick=function(){
+    if(opened)return;opened=true;this.style.animation="none";document.getElementById("hn").remove();
+    var lt=document.getElementById("lt");lt.classList.remove("hid");
+    var i=0,skip=false;lt.onclick=function(){skip=true};
+    (function next(){
+      if(i>=paras.length){document.getElementById("sg").innerHTML='<p class="sub" style="margin-top:20px">الفصل القادم لسه مستنيكم تكتبوه سوا... 🌙</p>'+btn("كملي ❤️",6);return}
+      var p=document.createElement("p");lt.appendChild(p);var t=paras[i++],k=0;
+      (function ty(){if(skip||k>=t.length){p.innerHTML=t;setTimeout(next,skip?30:500);return}
+        k++;p.textContent=t.slice(0,k);if(t.charAt(k-1)==="<"){k=t.length}setTimeout(ty,24)})();
+    })();
+  };
+};
+R[6]=function(){
+  app.innerHTML='<div class="big" id="bg">🌟</div><h2>الحكاية مش محتاجة نهاية مثالية</h2><p>محتاجة شخصين مستعدين يكملوا بصدق.</p><p class="sub">إيه أكتر حاجة نفسك تكون موجودة في علاقتنا من هنا ورايح؟ (اختاري واحدة أو أكتر)</p>'+
+  ["💌 نتكلم ونشارك تفاصيل يومنا أكتر","🤍 نفهم بعض ونقلل سوء التفاهم","🌱 ندي علاقتنا وقتًا واهتمامًا من الطرفين","🌙 نبدأ من جديد ونتعلم من اللي فات"].map(function(t){return '<button class="ch">'+t+'</button>'}).join("")+
+  '<div class="hid" id="q"><p>كل خطوة صغيرة بنعملها بصدق ممكن تفرق. مش لازم نكون مثاليين، المهم نفضل صادقين مع بعض ونحاول نكون أحسن.</p><button class="b" id="fin">بداية حكايتنا الجديدة ❤️</button></div><div id="end"></div>';
+  app.querySelectorAll(".ch").forEach(function(c){c.onclick=function(){c.classList.toggle("on");document.getElementById("q").classList.toggle("hid",!app.querySelector(".ch.on"))}});
+  document.getElementById("fin").onclick=function(){hearts();hearts();app.innerHTML='<div class="big">🌟</div><h2>لسه في حكايات حلوة مستنيانا... ودي واحدة منها.</h2><p class="note">❤️</p>'};
+};
+
+// stars
+var cv=document.getElementById("sky"),cx=cv.getContext("2d"),st=[];
+function rs(){cv.width=innerWidth;cv.height=innerHeight;st=[];for(var i=0;i<90;i++)st.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.5+.3,p:Math.random()*6})}
+addEventListener("resize",rs);rs();
+(function d(t){cx.clearRect(0,0,cv.width,cv.height);st.forEach(function(s){cx.globalAlpha=.4+.6*Math.abs(Math.sin(t/1500+s.p));cx.fillStyle="#fff";cx.beginPath();cx.arc(s.x,(s.y+t/200*s.r)%cv.height,s.r,0,7);cx.fill()});requestAnimationFrame(d)})(0);
+
+// optional soft music (off until tapped)
+var ac=null,on=false,snd=document.getElementById("snd");
+snd.onclick=function(){
+  try{
+    if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();var g=ac.createGain();g.gain.value=0;g.connect(ac.destination);ac.g=g;
+      [220,277.18,329.63,440].forEach(function(f,i){var o=ac.createOscillator();o.type="sine";o.frequency.value=f;var q=ac.createGain();q.gain.value=.25;var l=ac.createOscillator();l.frequency.value=.1+i*.05;var lg=ac.createGain();lg.gain.value=.12;l.connect(lg);lg.connect(q.gain);o.connect(q);q.connect(g);o.start();l.start()})}
+    on=!on;ac.g.gain.linearRampToValueAtTime(on?.12:0,ac.currentTime+1);if(on)ac.resume();
+    snd.setAttribute("aria-pressed",on);snd.textContent=on?"🔇 إيقاف":"🎵 موسيقى";
+  }catch(e){}
+};
+R[cur]();app.classList.add("in");document.body.classList.toggle("rose",cur>=5);
+</script>
+</body>
+</html>
